@@ -1,11 +1,11 @@
 <script lang="ts">
   import "../app.css";
 	import Navbar from "../components/Navbar.svelte";
-	import NavbarElement from "../components/NavbarElement.svelte";
-	import type NavbarElementData from "../components/NavbarElementData";
-  // import type { LayoutData } from './$types';
+  import { currentUser } from "$lib/pocketbase";
+	import type NavbarElementData from "../lib/NavbarElementData";
+  import {applyAction, enhance} from '$app/forms';
+  import {pb} from '$lib/pocketbase';
 
-  // export let data: LayoutData;
   let navbarElements: readonly NavbarElementData[] = [
     {name: "Magazyn", route: "/store"},
     {name: "Kontakt", route: "/contact"},

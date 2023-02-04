@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type NavbarElementData from "./NavbarElementData";
+	import type NavbarElementData from "../lib/NavbarElementData";
 
   export let data: NavbarElementData;
 </script>

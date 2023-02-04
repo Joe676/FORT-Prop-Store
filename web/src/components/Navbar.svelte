@@ -1,8 +1,8 @@
 <script lang="ts">
 	import NavbarElement from "./NavbarElement.svelte";
-	import type NavbarElementData from "./NavbarElementData";
-  // import { ChevronDown } from '@steeze-ui/heroicons'
-  // import { Icon } from '@steeze-ui/svelte-icon'
+	import type NavbarElementData from "../lib/NavbarElementData";
+  import {applyAction, enhance} from '$app/forms';
+  import {currentUser, pb} from '$lib/pocketbase';
 
   export let navbarElements: readonly NavbarElementData[];
 </script>
@@ -16,6 +16,21 @@
       {#each navbarElements as element}
         <NavbarElement data={element}/>
       {/each}
+      {#if $currentUser}
+        <li>
+          <form method="POST" action="/logout" use:enhance={()=>{
+            return async ({result}) => {
+              pb.authStore.clear();
+              applyAction(result);
+            }}}>
+            <button>Wyloguj</button>
+          </form>
+        </li>
+        <NavbarElement data={{name: $currentUser.email, route: "/"}}/>
+      {:else}
+        <NavbarElement data={{name: "Zaloguj", route: "/login"}}/>
+        <NavbarElement data={{name: "Rejestracja", route: "/register"}}/>
+      {/if}
     </ul>
   </div>
 </div>
