@@ -1,19 +1,18 @@
 import { pb } from '$lib/pocketbase';
-import type Category from '../../lib/models/CategoryType';
-import type Item from '../../lib/models/ItemType';
+import type Category from '$lib/models/CategoryType';
+import type Item from '$lib/models/ItemType';
 import type { PageServerLoad } from './$types';
 
-export const load = (async () => {
+export const load = (async ({params}) => {
     const final_tree = await getCategoryTree();
-    const items = await getAllItems();
+    const items = await getItemsFromCategory(params.id);
 
-    return {categories: final_tree, items};
+    return {categories: final_tree, items, categoryId: params.id};
 }) satisfies PageServerLoad;
 
 
-const getAllItems =async ():Promise<Item[]> => {
-    const itemsRecords = await pb.collection('items').getFullList(100);
-
+const getItemsFromCategory =async (id:string):Promise<Item[]> => {
+    const itemsRecords = await pb.collection('items').getFullList(100, {filter:`category_id="${id}"`});
 
     const items: Item[] = itemsRecords.map(r => ({
         title: r.title, 

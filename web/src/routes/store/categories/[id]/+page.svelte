@@ -4,20 +4,19 @@
 	import TreeView from '$lib/components/TreeView.svelte';
 	import type Category from '$lib/models/CategoryType';
 	import type Tree from '$lib/models/TreeType';
-  import type { PageData } from './$types';
+    import type { PageData } from './$types';
     
-  export let data: PageData;
-	
-  const makeTree = (c: Category): Tree => {
-      return {
-          label: c.name, 
-          children: c.children ? c.children.map(makeTree) : undefined, 
-          id: c.id};
-  };
+    export let data: PageData;		
+    const makeTree = (c: Category): Tree => {
+        return {
+            label: c.name, 
+            children: c.children ? c.children.map(makeTree) : undefined, 
+            id: c.id}
+    };
 
-  const tree: Tree = {
-		label: "Kategorie", 
-		children: data.categories.map(makeTree),
+    const tree: Tree = {
+		label: "Kategorie", children: 
+            data.categories.map(makeTree),
 	}
 </script>
 
@@ -39,7 +38,7 @@
     </div>
     <div class="w-1/4">
         <Card>
-          <TreeView tree={tree}/>
+          <TreeView tree={tree} currentId={data.categoryId}/>
         </Card>
     </div>
 </div>

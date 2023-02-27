@@ -1,8 +1,8 @@
 <script lang="ts">
 	import NavbarElement from "./NavbarElement.svelte";
-	import type NavbarElementData from "../lib/NavbarElementData";
   import {applyAction, enhance} from '$app/forms';
   import {currentUser, pb} from '$lib/pocketbase';
+	import type NavbarElementData from "$lib/NavbarElementData";
 
   export let navbarElements: readonly NavbarElementData[];
 </script>

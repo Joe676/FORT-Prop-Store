@@ -3,22 +3,21 @@
   import {ChevronRight} from '@steeze-ui/heroicons';
   import {Icon} from '@steeze-ui/svelte-icon';
 
-	const _expansionState = {
-		/* treeNodeId: expanded <boolean> */
-	}
+	const _expansionState:Map<string, boolean> = new Map();
+
 </script>
 <script lang="ts">
-	import type Tree from "../lib/TreeType";
-
-
-	import { slide } from 'svelte/transition'
+	import type Tree from "$lib/TreeType";
 
 	export let tree: Tree;
-	const {label, children} = tree;
+	export let currentId: string|undefined = undefined;
 
-	let expanded = _expansionState[label] || false
+	const {label, children, id} = tree;
+
+	let expanded:boolean = _expansionState.get(label) || false
 	const toggleExpansion = () => {
-		expanded = _expansionState[label] = !expanded
+		_expansionState.set(label, !expanded);
+		expanded = !expanded;
 	}
 	$: arrowDown = expanded
 </script>
@@ -27,23 +26,26 @@
 	<li>
 		{#if children}
 			<!-- svelte-ignore a11y-click-events-have-key-events -->
-			<span on:click={toggleExpansion}>
-        
-				<span class="arrow" class:arrowDown>
+			<span >
+				<span class="arrow" class:arrowDown on:click={toggleExpansion}> 
           <!-- &#x25b6 -->
           <Icon src={ChevronRight} size="12"/>
         </span>
-				{label}
+				<a href={id!==undefined ? `/store/categories/${id}`:"/store"} class:font-bold={id==currentId}>
+					{label}
+				</a>
 			</span>
 			{#if expanded}
 				{#each children as child}
-					<svelte:self tree={child} />
+					<svelte:self tree={child} currentId={currentId}/>
 				{/each}
 			{/if}
 		{:else}
 			<span>
 				<span class="no-arrow"/>
-				{label}
+				<a href={id!==undefined ? `/store/categories/${id}`:"/store"} class:font-bold={id==currentId}>
+					{label}
+				</a>
 			</span>
 		{/if}
 	</li>
